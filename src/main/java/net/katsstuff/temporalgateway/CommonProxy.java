@@ -20,30 +20,35 @@
  */
 package net.katsstuff.temporalgateway;
 
-import org.spongepowered.api.Sponge;
-
-import net.katsstuff.temporalgateway.handler.SnapshotHandler;
+import net.katsstuff.temporalgateway.entity.agent.EntityAgentSkeleton;
+import net.katsstuff.temporalgateway.helper.LogHelper;
+import net.katsstuff.temporalgateway.lib.LibEntityNames;
 import net.katsstuff.temporalgateway.lib.LibMod;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
-@Mod(modid = LibMod.ID, name = LibMod.NAME)
-public class TemporalGateway {
+@Mod.EventBusSubscriber
+public class CommonProxy {
 
-	@Mod.Instance
-	public static TemporalGateway instance;
+	private static int entityId;
 
-	@SidedProxy(serverSide = LibMod.COMMON_PROXY, clientSide = LibMod.CLIENT_PROXY)
-	public static CommonProxy proxy;
+	public void registerEntityRenderers() {}
 
-	private final SnapshotHandler snapshotHandler = new SnapshotHandler();
+	@SubscribeEvent
+	public static void onRegistryRegister(RegistryEvent.Register<EntityEntry> event) {
+	}
 
-	@Mod.EventHandler
-	public void onFMLPreInitialization(FMLPreInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(snapshotHandler);
-		Sponge.getEventManager().registerListeners(this, snapshotHandler);
-		proxy.registerEntityRenderers();
+	private static void registerEntity(String name, Class<? extends Entity> clazz) {
+		EntityRegistry.registerModEntity(new ResourceLocation(LibMod.ID, name), clazz, name, entityId++, TemporalGateway.instance, 64, 3, false);
+	}
+
+	private static void registerEntity(String name, Class<? extends Entity> clazz, int color1, int color2) {
+		EntityRegistry.registerModEntity(new ResourceLocation(LibMod.ID, name), clazz, name, entityId++, TemporalGateway.instance, 64, 3, false,
+				color1, color2);
 	}
 }

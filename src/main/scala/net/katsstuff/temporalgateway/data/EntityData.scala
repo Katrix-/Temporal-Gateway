@@ -56,6 +56,16 @@ case class EntityData(
 
 	override def toNBT: NBTTagCompound = {
 		val tag = new NBTTagCompound
+
+		for(((dim, uuid), entityTag) <- entities) {
+			val dimTag = entityTag.getCompoundTag(dim.toString)
+
+			dimTag.setTag(uuid.toString, entityTag)
+
+			tag.setTag(dim.toString, dimTag)
+		}
+
+		tag
 	}
 }
 object EntityData {
@@ -98,5 +108,23 @@ object EntityData {
 				map.put(dimId, entity.serializeNBT())
 			}
 		}
+	}
+
+	def fromNBT(tag: NBTTagCompound): EntityData = {
+		val dimKeys = tag.getKeySet.asScala
+		val res = for(dimString <- dimKeys) yield {
+			val dim = dimString.toInt
+			val dimTag = tag.getCompoundTag(dimString)
+
+			val uuidKeys = dimTag.getKeySet.asScala
+			for(uuidString <- uuidKeys) yield {
+				val uuid = UUID.fromString(uuidString)
+				val entityTag = dimTag.getCompoundTag(uuidString)
+
+				(dim, uuid) -> entityTag
+			}
+		}
+
+		EntityData(mutable.Map(res.flatten.toSeq: _*))
 	}
 }

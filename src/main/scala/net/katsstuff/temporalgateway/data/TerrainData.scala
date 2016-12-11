@@ -26,6 +26,7 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 import org.spongepowered.api.block.{BlockSnapshot => SpongeBlockSnapshot}
+import org.spongepowered.api.world.{Location, World => SpongeWorld}
 
 import net.minecraft.block.state.IBlockState
 import net.minecraft.nbt.NBTTagCompound
@@ -57,10 +58,12 @@ case class TerrainData(
 	}
 
 	def addBlock(snapshot: SpongeBlockSnapshot): Unit = {
-		val optDimPos: Optional[(Int, BlockPos)] = snapshot.getLocation.filter(loc => loc.getExtent.isInstanceOf[World]).map(loc => {
-			val dim = loc.getExtent.asInstanceOf[World].provider.getDimension
-			val pos = new BlockPos(loc.getBlockX, loc.getBlockY, loc.getBlockZ)
-			(dim, pos)
+		val optDimPos: Optional[(Int, BlockPos)] = snapshot.getLocation
+			.filter((loc: Location[SpongeWorld]) => loc.getExtent.isInstanceOf[World])
+			.map((loc: Location[SpongeWorld]) => {
+				val dim = loc.getExtent.asInstanceOf[World].provider.getDimension
+				val pos = new BlockPos(loc.getBlockX, loc.getBlockY, loc.getBlockZ)
+				(dim, pos)
 		})
 
 		if(optDimPos.isPresent && blocks.contains(optDimPos.get())) {

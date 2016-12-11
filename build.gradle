@@ -65,8 +65,7 @@ repositories {
 
 dependencies {
     //We need sponge to do fine grained events for us
-    compile 'org.spongepowered:spongeforge:' + config.mc_version + "-" + config.forge_buildnumber + "-" + config.sponge_api + "-" +
-            config.spongeforge_channel + "-" + config.spongeforge_buildnumber
+    compile "org.spongepowered:spongeforge:$config.mc_version-$config.forge_buildnumber-$config.sponge_api-$config.spongeforge_channel-$config.spongeforge_buildnumber:dev"
 }
 
 processResources {

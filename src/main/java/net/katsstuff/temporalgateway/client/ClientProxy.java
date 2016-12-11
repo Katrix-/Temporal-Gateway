@@ -18,13 +18,16 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package net.katsstuff.temporalgateway.lib;
+package net.katsstuff.temporalgateway.client;
 
-public class LibMod {
+import net.katsstuff.temporalgateway.CommonProxy;
+import net.katsstuff.temporalgateway.client.renderer.RenderAgentSkeleton;
+import net.katsstuff.temporalgateway.entity.agent.EntityAgentSkeleton;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
-	public static final String ID = "temporalgateway";
-	public static final String NAME = "Temporal Gateway";
+public class ClientProxy extends CommonProxy {
 
-	public static final String COMMON_PROXY = "net.katsstuff.temporalgateway.CommonProxy";
-	public static final String CLIENT_PROXY = "net.katsstuff.temporalgateway.client.ClientProxy";
+	@Override
+	public void registerEntityRenderers() {
+	}
 }
